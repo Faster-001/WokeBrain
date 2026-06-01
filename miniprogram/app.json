@@ -1,12 +1,43 @@
 {
   "pages": [
+    "pages/chat/chat",
+    "pages/memory/memory",
+    "pages/settings/settings",
     "pages/index/index",
     "pages/logs/logs"
   ],
   "window": {
-    "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "Weixin",
-    "navigationBarBackgroundColor": "#ffffff"
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "蜗壳脑袋",
+    "navigationBarBackgroundColor": "#0a0a0a",
+    "backgroundColor": "#0a0a0a"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#999999",
+    "selectedColor": "#1e90ff",
+    "backgroundColor": "#111111",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/chat/chat",
+        "text": "对话"
+      },
+      {
+        "pagePath": "pages/memory/memory",
+        "text": "记忆"
+      },
+      {
+        "pagePath": "pages/settings/settings",
+        "text": "设置"
+      }
+    ]
+  },
+  "preloadRule": {
+    "pages/chat/chat": {
+      "network": "all",
+      "packages": ["pages/memory/memory", "pages/settings/settings"]
+    }
   },
   "style": "v2",
   "componentFramework": "glass-easel",
