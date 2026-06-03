@@ -1,3 +1,56 @@
-<view class="page-container">
-  <text class="page-name">记忆</text>
-</view>
+<scroll-view
+  class="page-scroll"
+  scroll-y
+  enhanced
+  bounces
+  show-scrollbar="{{false}}"
+  style="height: {{scrollViewHeight}}px"
+>
+  <view class="page-content" style="padding-bottom: {{contentPaddingBottom}}px">
+    <section-card bind:headertap="goToSchedule">
+      <view slot="header">
+        <text class="card-title">日程</text>
+        <view class="card-arrow"></view>
+      </view>
+      <view slot="body">
+        <view
+          class="item-row {{index < schedules.length - 1 ? 'item-border' : ''}}"
+          wx:for="{{schedules}}"
+          wx:key="id"
+        >
+          <view class="item-dot"></view>
+          <view class="item-content">
+            <text class="item-primary">{{item.title}}</text>
+            <text class="item-secondary">{{item.date}} {{item.weekday}} · {{item.time}}<text wx:if="{{item.isCountdown}}" class="item-countdown"> · {{item.countdown}}天后</text></text>
+          </view>
+        </view>
+        <view class="card-empty" wx:if="{{schedules.length === 0}}">
+          <text class="empty-text">暂无日程</text>
+        </view>
+      </view>
+    </section-card>
+
+    <section-card bind:headertap="goToTimetable">
+      <view slot="header">
+        <text class="card-title">课表</text>
+        <view class="card-arrow"></view>
+      </view>
+      <view slot="body">
+        <view
+          class="item-row {{index < courses.length - 1 ? 'item-border' : ''}}"
+          wx:for="{{courses}}"
+          wx:key="id"
+        >
+          <view class="item-dot"></view>
+          <view class="item-content">
+            <text class="item-primary">{{item.name}}</text>
+            <text class="item-secondary">{{item.timeRange}} · {{item.location}}</text>
+          </view>
+        </view>
+        <view class="card-empty" wx:if="{{courses.length === 0}}">
+          <text class="empty-text">今日无课程</text>
+        </view>
+      </view>
+    </section-card>
+  </view>
+</scroll-view>

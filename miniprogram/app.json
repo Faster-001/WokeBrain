@@ -3,6 +3,8 @@
     "pages/chat/chat",
     "pages/memory/memory",
     "pages/settings/settings",
+    "pages/memory/schedule/schedule",
+    "pages/memory/timetable/timetable",
     "pages/index/index",
     "pages/logs/logs"
   ],

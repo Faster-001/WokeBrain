@@ -1,63 +1,14 @@
 .tab-bar {
   position: fixed;
-  bottom: 70rpx;
+  bottom: 35px;
   left: 50%;
   transform: translateX(-50%);
-  width: 600rpx;
-  height: 120rpx;
+  width: 300px;
+  height: 60px;
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-/* 大屏适配 */
-@media screen and (min-width: 768px) {
-  .tab-bar {
-    width: 300px;
-    height: 60px;
-    bottom: 35px;
-    min-width: 300px;
-    max-width: 300px;
-  }
-  
-  .tab-bar-bg {
-    border-radius: 30px;
-    min-width: 300px;
-    max-width: 300px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5), 
-                0 0 0 1px rgba(255, 255, 255, 0.05),
-                inset 0 1px 0 rgba(255, 255, 255, 0.05),
-                0 0 10px 2px rgba(30, 144, 255, 0.25),
-                0 0 20px 4px rgba(30, 144, 255, 0.12),
-                0 0 40px 8px rgba(30, 144, 255, 0.06);
-  }
-  
-  .tab-bar-content {
-    padding: 0 10px;
-    min-width: 300px;
-    max-width: 300px;
-  }
-  
-  .tab-item {
-    min-width: 100px;
-    max-width: 100px;
-  }
-  
-  .tab-icon-wrapper {
-    width: 25px !important;
-    height: 25px !important;
-    margin-bottom: 4px !important;
-  }
-  
-  .tab-icon {
-    width: 20px !important;
-    height: 20px !important;
-  }
-  
-  .tab-text {
-    font-size: 11px !important;
-  }
 }
 
 .tab-bar-bg {
@@ -67,13 +18,13 @@
   right: 0;
   bottom: 0;
   background: linear-gradient(135deg, #1a1a1a, #111111);
-  border-radius: 70rpx;
-  box-shadow: 0 10rpx 40rpx rgba(0, 0, 0, 0.5), 
-              0 0 0 1rpx rgba(255, 255, 255, 0.05),
-              inset 0 1rpx 0 rgba(255, 255, 255, 0.05),
-              0 0 20rpx 4rpx rgba(30, 144, 255, 0.25),
-              0 0 40rpx 8rpx rgba(30, 144, 255, 0.12),
-              0 0 80rpx 15rpx rgba(30, 144, 255, 0.06);
+  border-radius: 30px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5),
+              0 0 0 1px rgba(255, 255, 255, 0.05),
+              inset 0 1px 0 rgba(255, 255, 255, 0.05),
+              0 0 10px 2px rgba(30, 144, 255, 0.25),
+              0 0 20px 4px rgba(30, 144, 255, 0.12),
+              0 0 40px 8px rgba(30, 144, 255, 0.06);
   backdrop-filter: blur(20px);
 }
 
@@ -84,7 +35,7 @@
   height: 100%;
   align-items: center;
   justify-content: space-around;
-  padding: 0 20rpx;
+  padding: 0 10px;
   box-sizing: border-box;
 }
 
@@ -98,31 +49,27 @@
   position: relative;
 }
 
-/* 图标容器 */
 .tab-icon-wrapper {
-  width: 50rpx;
-  height: 50rpx;
-  margin-bottom: 8rpx;
+  width: 25px;
+  height: 25px;
+  margin-bottom: 4px;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* 图标基础样式 */
 .tab-icon {
-  width: 40rpx;
-  height: 40rpx;
+  width: 20px;
+  height: 20px;
   position: relative;
   background: #999999;
 }
 
-/* 获得焦点时的强调色 */
 .tab-item.active .tab-icon {
   background: #1e90ff;
 }
 
-/* 对话图标 - 聊天气泡 */
 .icon-chat {
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Cpath d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'%3E%3C/path%3E%3C/svg%3E");
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Cpath d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'%3E%3C/path%3E%3C/svg%3E");
@@ -132,7 +79,6 @@
   -webkit-mask-repeat: no-repeat;
 }
 
-/* 记忆图标 - 书本 */
 .icon-memory {
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Cpath d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'%3E%3C/path%3E%3C/svg%3E");
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Cpath d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'%3E%3C/path%3E%3C/svg%3E");
@@ -142,7 +88,6 @@
   -webkit-mask-repeat: no-repeat;
 }
 
-/* 设置图标 - 齿轮 */
 .icon-settings {
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Ccircle cx='12' cy='12' r='3'%3E%3C/circle%3E%3Cpath d='M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z'%3E%3C/path%3E%3C/svg%3E");
   -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Ccircle cx='12' cy='12' r='3'%3E%3C/circle%3E%3Cpath d='M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z'%3E%3C/path%3E%3C/svg%3E");
@@ -153,7 +98,7 @@
 }
 
 .tab-text {
-  font-size: 22rpx;
+  font-size: 11px;
   color: #666666;
   font-weight: 500;
 }

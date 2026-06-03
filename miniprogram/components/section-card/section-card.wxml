@@ -1,0 +1,8 @@
+<view class="section-card">
+  <view class="card-header" bindtap="onHeaderTap" hover-class="card-header-active">
+    <slot name="header"></slot>
+  </view>
+  <view class="card-body">
+    <slot name="body"></slot>
+  </view>
+</view>

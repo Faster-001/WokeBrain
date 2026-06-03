@@ -1,0 +1,25 @@
+.section-card {
+  background: var(--gradient-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-primary-alpha-3);
+  box-shadow: var(--shadow-sm), 0 0 6px 1px rgba(30, 144, 255, 0.08);
+  overflow: hidden;
+  margin-bottom: var(--spacing-md);
+}
+
+.card-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.card-header-active {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.card-body {
+  padding: var(--spacing-xs) 0;
+}

@@ -1,17 +1,21 @@
-// app.ts
 App<IAppOption>({
   globalData: {},
   onLaunch() {
-    // 展示本地存储能力
     const logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
 
-    // 登录
+    const sysInfo = wx.getSystemInfoSync()
+    const tabBarHeight = 60
+    const tabBarBottom = 35
+    const extraGap = 10
+    const safeAreaBottom = sysInfo.screenHeight - sysInfo.safeArea.bottom
+
+    this.globalData.contentPaddingBottom = tabBarBottom + tabBarHeight + extraGap + safeAreaBottom
+
     wx.login({
       success: res => {
         console.log(res.code)
-        // 发送 res.code 到后台换取 openId, sessionKey, unionId
       },
     })
   },
