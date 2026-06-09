@@ -1,5 +1,5 @@
 <view class="section-card">
-  <view class="card-header" bindtap="onHeaderTap" hover-class="card-header-active">
+  <view wx:if="{{showHeader}}" class="card-header" bindtap="onHeaderTap" hover-class="{{headerClickable ? 'card-header-active' : ''}}">
     <slot name="header"></slot>
   </view>
   <view class="card-body">

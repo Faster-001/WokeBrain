@@ -1,3 +1,94 @@
-<view class="page-container">
-  <text class="page-name">设置</text>
+<scroll-view
+  class="page-scroll"
+  scroll-y
+  enhanced
+  bounces
+  show-scrollbar="{{false}}"
+  style="height: {{scrollViewHeight}}px"
+>
+  <view class="page-content" style="padding-bottom: {{contentPaddingBottom}}px">
+    <section-card
+      wx:for="{{groups}}"
+      wx:key="title"
+      wx:for-item="group"
+      wx:for-index="groupIndex"
+      showHeader="{{false}}"
+    >
+      <view slot="body">
+        <view
+          class="setting-row {{itemIndex < group.items.length - 1 ? 'setting-border' : ''}} {{item.type === 'arrow' ? 'setting-row-arrow' : ''}}"
+          wx:for="{{group.items}}"
+          wx:key="id"
+          wx:for-item="item"
+          wx:for-index="itemIndex"
+          bindtap="{{item.type === 'arrow' ? 'onArrowTap' : ''}}"
+          data-group-index="{{groupIndex}}"
+          data-item-index="{{itemIndex}}"
+          hover-class="{{item.type === 'arrow' ? 'setting-row-active' : ''}}"
+        >
+          <text class="setting-label">{{item.title}}</text>
+          <view
+            wx:if="{{item.type === 'toggle'}}"
+            class="toggle {{item.value ? 'toggle-on' : ''}}"
+            bindtap="onToggle"
+            data-group-index="{{groupIndex}}"
+            data-item-index="{{itemIndex}}"
+          >
+            <view class="toggle-thumb"></view>
+          </view>
+          <view wx:elif="{{item.type === 'arrow'}}" class="setting-arrow">
+            <view class="arrow-icon"></view>
+          </view>
+        </view>
+      </view>
+    </section-card>
+  </view>
+</scroll-view>
+
+<view wx:if="{{authDialogVisible}}" class="dialog-mask" bindtap="onDialogMaskTap">
+  <view class="dialog" catchtap="preventBubble">
+    <view class="dialog-header">
+      <text class="dialog-title">认证信息</text>
+    </view>
+    <view class="dialog-body">
+      <view class="dialog-field">
+        <text class="field-label">账号</text>
+        <input
+          class="field-input"
+          placeholder="请输入账号"
+          placeholder-class="field-placeholder"
+          value="{{authUsername}}"
+          bindinput="onAuthUsernameInput"
+          maxlength="50"
+        />
+      </view>
+      <view class="dialog-field">
+        <text class="field-label">密码</text>
+        <view class="password-row">
+          <input
+            class="field-input"
+            placeholder="请输入密码"
+            placeholder-class="field-placeholder"
+            password="{{!passwordVisible}}"
+            value="{{authPassword}}"
+            bindinput="onAuthPasswordInput"
+            maxlength="50"
+          />
+          <view class="eye-btn" bindtap="onTogglePasswordVisible">
+            <view class="eye-icon {{passwordVisible ? 'eye-open' : 'eye-close'}}">
+              <view class="eye-svg"></view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="dialog-footer">
+      <view class="dialog-btn dialog-btn-cancel" bindtap="onAuthDialogClose">
+        <text>取消</text>
+      </view>
+      <view class="dialog-btn dialog-btn-confirm" bindtap="onAuthConfirm">
+        <text>确定</text>
+      </view>
+    </view>
+  </view>
 </view>

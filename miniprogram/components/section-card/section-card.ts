@@ -2,9 +2,21 @@ Component({
   options: {
     multipleSlots: true
   },
+  properties: {
+    showHeader: {
+      type: Boolean,
+      value: true
+    },
+    headerClickable: {
+      type: Boolean,
+      value: true
+    }
+  },
   methods: {
     onHeaderTap() {
-      this.triggerEvent('headertap')
+      if (this.properties.headerClickable) {
+        this.triggerEvent('headertap')
+      }
     }
   }
 })

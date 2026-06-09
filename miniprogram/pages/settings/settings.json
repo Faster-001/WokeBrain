@@ -3,5 +3,7 @@
   "navigationBarTextStyle": "white",
   "backgroundColor": "#0a0a0a",
   "initialRenderingCache": "static",
-  "usingComponents": {}
+  "usingComponents": {
+    "section-card": "/components/section-card/section-card"
+  }
 }

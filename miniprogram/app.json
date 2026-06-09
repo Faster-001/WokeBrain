@@ -5,6 +5,7 @@
     "pages/settings/settings",
     "pages/memory/schedule/schedule",
     "pages/memory/timetable/timetable",
+    "pages/settings/model/model",
     "pages/index/index",
     "pages/logs/logs"
   ],
