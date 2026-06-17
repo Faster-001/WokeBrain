@@ -1,3 +1,83 @@
 <view class="page-container">
-  <text class="page-name">模型管理</text>
+  <view class="top-section">
+    <view class="top-section-inner">
+      <view class="input-group">
+        <text class="input-label">Base URL (OpenAI Compatible)</text>
+        <input
+          class="input-field"
+          placeholder="https://api.openai.com/v1"
+          placeholder-class="input-placeholder"
+          value="{{baseUrl}}"
+          bindinput="onBaseUrlInput"
+          maxlength="100"
+        />
+      </view>
+      
+      <view class="input-group">
+        <text class="input-label">API Key</text>
+        <view class="password-row">
+          <input
+            class="input-field"
+            placeholder="sk-..."
+            placeholder-class="input-placeholder"
+            password="{{!passwordVisible}}"
+            value="{{apiKey}}"
+            bindinput="onApiKeyInput"
+            maxlength="100"
+          />
+          <view class="eye-btn" bindtap="onToggleApiKeyVisible">
+            <view class="eye-icon {{passwordVisible ? 'eye-open' : 'eye-close'}}">
+              <view class="eye-svg"></view>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <button class="save-btn" bindtap="onSaveAndFetch">保存 & 获取模型</button>
+    </view>
+  </view>
+  
+  <view class="bottom-section">
+    <scroll-view
+      class="model-list-scroll"
+      scroll-y
+      enhanced
+      bounces
+    >
+      <view class="model-list">
+        <view
+          class="model-item {{index < models.length - 1 ? 'model-border' : ''}}"
+          wx:for="{{models}}"
+          wx:key="id"
+          data-id="{{item.id}}"
+          data-index="{{index}}"
+          bindtap="onModelSelect"
+          hover-class="model-item-active"
+        >
+          <block wx:if="{{index < models.length - 1}}">
+            <view class="model-name-wrapper">
+              <text class="model-name {{item.needMarquee ? 'model-name-marquee' : ''}}" style="{{item.needMarquee ? '--marquee-distance: -' + item.marqueeDistance + 'px' : ''}}">{{item.name}}</text>
+            </view>
+            <view class="radio-btn {{selectedModelId === item.id ? 'radio-selected' : ''}}">
+              <view wx:if="{{selectedModelId === item.id}}" class="radio-dot"></view>
+            </view>
+          </block>
+          <block wx:else>
+            <input
+              class="custom-model-input"
+              placeholder="自定义模型 ID ..."
+              placeholder-class="custom-model-placeholder"
+              value="{{customModelId}}"
+              bindinput="onCustomModelInput"
+              maxlength="100"
+            />
+            <view class="radio-btn {{selectedModelId === item.id ? 'radio-selected' : ''}}">
+              <view wx:if="{{selectedModelId === item.id}}" class="radio-dot"></view>
+            </view>
+          </block>
+        </view>
+      </view>
+      <view class="model-list-bottom-space"></view>
+    </scroll-view>
+  </view>
 </view>
