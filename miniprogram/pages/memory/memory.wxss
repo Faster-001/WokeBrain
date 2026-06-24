@@ -60,7 +60,7 @@
 
 .item-countdown {
   color: var(--color-primary);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .card-empty {

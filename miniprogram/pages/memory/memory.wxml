@@ -21,7 +21,7 @@
           <view class="item-dot"></view>
           <view class="item-content">
             <text class="item-primary">{{item.title}}</text>
-            <text class="item-secondary">{{item.date}} {{item.weekday}} · {{item.time}}<text wx:if="{{item.isCountdown}}" class="item-countdown"> · {{item.countdown}}天后</text></text>
+            <text class="item-secondary">{{item.date}} {{item.weekday}} {{item.time}} · {{item.location}}<text wx:if="{{item.isCountdown}}" class="item-countdown"> · {{item.countdown}}天后</text></text>
           </view>
         </view>
         <view class="card-empty" wx:if="{{schedules.length === 0}}">

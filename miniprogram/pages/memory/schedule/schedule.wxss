@@ -1,13 +1,134 @@
 .page-container {
   height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #0a0a0a;
+  background-color: var(--color-bg-primary);
 }
 
-.page-name {
-  font-size: 48rpx;
-  color: #ffffff;
+.schedule-scroll {
+  height: 100%;
+}
+
+.schedule-list {
+  padding: var(--spacing-md);
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.schedule-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--gradient-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-primary-alpha-3);
+  box-shadow: var(--shadow-sm), 0 0 6px 1px rgba(30, 144, 255, 0.08);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  transition: background-color var(--transition-fast);
+}
+
+.schedule-card-active {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.schedule-card-countdown {
+  border-color: var(--color-primary-alpha-2);
+  box-shadow: var(--shadow-sm), 0 0 8px 2px rgba(30, 144, 255, 0.12);
+}
+
+.schedule-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.schedule-title {
+  font-size: var(--font-lg);
+  color: var(--color-text-primary);
   font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+
+.schedule-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.schedule-datetime {
+  font-size: var(--font-md);
+  color: var(--color-primary);
+  line-height: 1.4;
+  flex-shrink: 0;
+}
+
+.schedule-separator {
+  font-size: var(--font-md);
+  color: var(--color-text-tertiary);
+  line-height: 1.4;
+  flex-shrink: 0;
+}
+
+.location-wrapper {
+  flex: 1;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.schedule-location {
+  font-size: var(--font-md);
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.location-marquee {
+  animation: marquee 8s linear infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  10% {
+    transform: translateX(0);
+  }
+  90% {
+    transform: translateX(var(--marquee-distance, -100%));
+  }
+  100% {
+    transform: translateX(var(--marquee-distance, -100%));
+  }
+}
+
+.schedule-countdown {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  margin-left: var(--spacing-md);
+  flex-shrink: 0;
+}
+
+.countdown-number {
+  font-size: 36px;
+  color: var(--color-primary);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.countdown-unit {
+  font-size: var(--font-lg);
+  color: var(--color-primary);
+  font-weight: 600;
+  line-height: 1;
+  margin-left: 2px;
+  transform: translateY(-1px);
+}
+
+.schedule-bottom-space {
+  height: 90px;
 }

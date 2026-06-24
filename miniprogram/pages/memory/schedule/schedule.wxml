@@ -1,3 +1,34 @@
 <view class="page-container">
-  <text class="page-name">日程详情</text>
+  <scroll-view
+    class="schedule-scroll"
+    scroll-y
+    enhanced
+    bounces
+    style="height: {{scrollViewHeight}}px"
+  >
+    <view class="schedule-list">
+      <view
+        class="schedule-card {{item.isCountdown ? 'schedule-card-countdown' : ''}}"
+        wx:for="{{schedules}}"
+        wx:key="id"
+        hover-class="schedule-card-active"
+      >
+        <view class="schedule-info">
+          <text class="schedule-title">{{item.title}}</text>
+          <view class="schedule-meta">
+            <text class="schedule-datetime">{{item.date}} {{item.weekday}} {{item.time}}</text>
+            <text class="schedule-separator">·</text>
+            <view class="location-wrapper">
+              <text class="schedule-location {{item.needMarquee ? 'location-marquee' : ''}}" style="{{item.needMarquee ? '--marquee-distance: -' + item.marqueeDistance + 'px' : ''}}">{{item.location}}</text>
+            </view>
+          </view>
+        </view>
+        <view wx:if="{{item.isCountdown}}" class="schedule-countdown">
+          <text class="countdown-number">{{item.countdown}}</text>
+          <text class="countdown-unit">天</text>
+        </view>
+      </view>
+      <view class="schedule-bottom-space"></view>
+    </view>
+  </scroll-view>
 </view>
