@@ -45,6 +45,20 @@ Component({
     },
     goToTimetable() {
       wx.navigateTo({ url: '/pages/memory/timetable/timetable' })
+    },
+    onSyncTap() {
+      wx.showLoading({ title: '同步中，请稍后…', mask: true })
+      const app = getApp<IAppOption>()
+      app.syncAllData()
+      setTimeout(() => {
+        wx.hideLoading()
+        wx.showToast({
+          title: '同步完成！',
+          icon: 'success',
+          duration: 1500
+        })
+        this.loadSchedules()
+      }, 600)
     }
   }
 })

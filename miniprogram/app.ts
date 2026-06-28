@@ -1,7 +1,12 @@
 App<IAppOption>({
   globalData: {
     contentPaddingBottom: 0,
-    schedules: []
+    schedules: [],
+    courses: [],
+    semesterConfig: {
+      startDate: '2026/03/02',
+      totalWeeks: 20
+    }
   },
   onLaunch() {
     const logs = wx.getStorageSync('logs') || []
@@ -17,6 +22,15 @@ App<IAppOption>({
     this.globalData.contentPaddingBottom = tabBarBottom + tabBarHeight + extraGap + safeAreaBottom
 
     this.initSchedules()
+    this.initCourses()
+
+    if (this.globalData.courses.length === 0) {
+      wx.showToast({
+        title: '记忆似乎被清除了TAT~',
+        icon: 'none',
+        duration: 2000
+      })
+    }
 
     wx.login({
       success: res => {
@@ -26,44 +40,69 @@ App<IAppOption>({
   },
 
   initSchedules() {
-    const cachedSchedules = wx.getStorageSync('schedules')
-    if (cachedSchedules && cachedSchedules.length > 0) {
-      this.globalData.schedules = cachedSchedules
-    } else {
-      const defaultSchedules = [
-        { title: '小组会议', date: '2026-07-04', time: '14:00', location: '会议室A301', isCountdown: false },
-        { title: '项目评审', date: '2026-07-05', time: '10:00', location: '报告厅2F', isCountdown: true },
-        { title: '生日聚会', date: '2026-07-07', time: '18:30', location: '市中心餐厅', isCountdown: false },
-        { title: '数据结构实验：深度优先搜索与广度优先搜索，上机测试限时2小时', date: '2026-07-08', time: '08:30', location: '实验楼C102xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', isCountdown: true },
-        { title: '英语四级考试', date: '2026-07-09', time: '09:00', location: '教学楼B201', isCountdown: true },
-        { title: '社团例会', date: '2026-07-10', time: '19:00', location: '学生活动中心', isCountdown: false },
-        { title: '导师面谈', date: '2026-07-11', time: '15:30', location: '理工楼508', isCountdown: false },
-        { title: '篮球训练', date: '2026-07-12', time: '16:00', location: '体育馆', isCountdown: false },
-        { title: '志愿者活动', date: '2026-07-13', time: '08:00', location: '社区服务中心', isCountdown: false },
-        { title: '期中考试复习', date: '2026-07-14', time: '14:00', location: '图书馆3楼', isCountdown: true },
-        { title: '高等数学期中考', date: '2026-07-15', time: '10:00', location: '教学楼A101', isCountdown: true },
-        { title: '班会', date: '2026-07-16', time: '18:30', location: '教室205', isCountdown: false },
-        { title: '编程竞赛', date: '2026-07-17', time: '13:00', location: '计算机实验室', isCountdown: true },
-        { title: '学术讲座', date: '2026-07-18', time: '19:00', location: '报告厅1F', isCountdown: false },
-        { title: '团队建设', date: '2026-07-19', time: '15:00', location: '户外拓展基地', isCountdown: false },
-        { title: '实习面试', date: '2026-07-20', time: '10:00', location: '科技园B座', isCountdown: true },
-        { title: '家庭聚餐', date: '2026-07-21', time: '18:00', location: '家乡饭店', isCountdown: false },
-        { title: '论文开题', date: '2026-07-22', time: '14:30', location: '研究生院会议室', isCountdown: true },
-        { title: '健身私教课', date: '2026-07-23', time: '17:00', location: '健身房', isCountdown: false },
-        { title: '毕业典礼彩排', date: '2026-07-24', time: '09:00', location: '大礼堂', isCountdown: true }
-      ]
-      this.globalData.schedules = defaultSchedules
-      wx.setStorageSync('schedules', defaultSchedules)
-      wx.showToast({
-        title: '记忆被清除了！',
-        icon: 'none',
-        duration: 2000
-      })
+    const cached = wx.getStorageSync('schedules')
+    if (cached && cached.length > 0) {
+      this.globalData.schedules = cached
     }
   },
 
   updateSchedules(schedules: any[]) {
     this.globalData.schedules = schedules
     wx.setStorageSync('schedules', schedules)
+  },
+
+  initCourses() {
+    const cached = wx.getStorageSync('courses')
+    if (cached && cached.length > 0) {
+      this.globalData.courses = cached
+    }
+    const cachedSemester = wx.getStorageSync('semesterConfig')
+    if (cachedSemester) {
+      this.globalData.semesterConfig = cachedSemester
+    }
+  },
+
+  updateCourses(courses: any[]) {
+    this.globalData.courses = courses
+    wx.setStorageSync('courses', courses)
+  },
+
+  syncAllData() {
+    const defaultSchedules = [
+      { title: '小组会议', date: '2026-07-04', time: '14:00', location: '会议室A301', isCountdown: false },
+      { title: '项目评审', date: '2026-07-05', time: '10:00', location: '报告厅2F', isCountdown: true },
+      { title: '生日聚会', date: '2026-07-07', time: '18:30', location: '市中心餐厅', isCountdown: false },
+      { title: '数据结构实验：深度优先搜索与广度优先搜索，上机测试限时2小时', date: '2026-07-08', time: '08:30', location: '实验楼C102xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', isCountdown: true },
+      { title: '英语四级考试', date: '2026-07-09', time: '09:00', location: '教学楼B201', isCountdown: true },
+      { title: '社团例会', date: '2026-07-10', time: '19:00', location: '学生活动中心', isCountdown: false },
+      { title: '导师面谈', date: '2026-07-11', time: '15:30', location: '理工楼508', isCountdown: false },
+      { title: '篮球训练', date: '2026-07-12', time: '16:00', location: '体育馆', isCountdown: false },
+      { title: '志愿者活动', date: '2026-07-13', time: '08:00', location: '社区服务中心', isCountdown: false },
+      { title: '期中考试复习', date: '2026-07-14', time: '14:00', location: '图书馆3楼', isCountdown: true },
+      { title: '高等数学期中考', date: '2026-07-15', time: '10:00', location: '教学楼A101', isCountdown: true },
+      { title: '班会', date: '2026-07-16', time: '18:30', location: '教室205', isCountdown: false },
+      { title: '编程竞赛', date: '2026-07-17', time: '13:00', location: '计算机实验室', isCountdown: true },
+      { title: '学术讲座', date: '2026-07-18', time: '19:00', location: '报告厅1F', isCountdown: false },
+      { title: '团队建设', date: '2026-07-19', time: '15:00', location: '户外拓展基地', isCountdown: false },
+      { title: '实习面试', date: '2026-07-20', time: '10:00', location: '科技园B座', isCountdown: true },
+      { title: '家庭聚餐', date: '2026-07-21', time: '18:00', location: '家乡饭店', isCountdown: false },
+      { title: '论文开题', date: '2026-07-22', time: '14:30', location: '研究生院会议室', isCountdown: true },
+      { title: '健身私教课', date: '2026-07-23', time: '17:00', location: '健身房', isCountdown: false },
+      { title: '毕业典礼彩排', date: '2026-07-24', time: '09:00', location: '大礼堂', isCountdown: true }
+    ]
+    this.globalData.schedules = defaultSchedules
+    wx.setStorageSync('schedules', defaultSchedules)
+
+    const defaultCourses = [
+      { name: '数学分析(B2)', teacher: '张明波', location: '3C202', periodStart: 3, periodEnd: 4, weekday: 1, weeks: [1, 2, 3, 4, 5, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18] },
+      { name: '面向科学问题求解的编程实践', teacher: '孙广中', location: '西区电三楼机房5楼各教室', periodStart: 11, periodEnd: 13, weekday: 3, weeks: [5, 6, 7, 8, 9, 11] },
+      { name: '数学分析(B2)', teacher: '张明波', location: '3C202', periodStart: 3, periodEnd: 4, weekday: 3, weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18] }
+    ]
+    this.globalData.courses = defaultCourses
+    wx.setStorageSync('courses', defaultCourses)
+
+    const defaultSemester = { startDate: '2026/03/02', totalWeeks: 20 }
+    this.globalData.semesterConfig = defaultSemester
+    wx.setStorageSync('semesterConfig', defaultSemester)
   }
 })

@@ -71,3 +71,58 @@ export const enrichSchedule = (schedule: Omit<Schedule, 'id'>, index: number): S
     countdown: daysUntil > 0 ? daysUntil : 0
   }
 }
+
+export interface CourseRaw {
+  name: string
+  teacher: string
+  location: string
+  periodStart: number
+  periodEnd: number
+  weekday: number
+  weeks: number[]
+}
+
+export interface Course extends CourseRaw {
+  id: string
+}
+
+export interface SemesterConfig {
+  startDate: string
+  totalWeeks: number
+}
+
+const WEEKDAY_MAP = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
+
+export const getWeekdayLabel = (weekday: number): string => {
+  return WEEKDAY_MAP[weekday] || ''
+}
+
+export const generateCourseId = (weekday: number, periodStart: number, periodEnd: number, index: number): string => {
+  const wd = String(weekday)
+  const ps = String(periodStart).padStart(2, '0')
+  const pe = String(periodEnd).padStart(2, '0')
+  const idx = String(index + 1).padStart(2, '0')
+  return `${wd}${ps}${pe}-${idx}`
+}
+
+export const enrichCourse = (course: CourseRaw, index: number): Course => {
+  return {
+    ...course,
+    id: generateCourseId(course.weekday, course.periodStart, course.periodEnd, index)
+  }
+}
+
+export const getSemesterWeek = (semesterConfig: SemesterConfig, weekOffset: number): number => {
+  const startDate = new Date(semesterConfig.startDate.replace(/\//g, '-'))
+  const now = new Date()
+  const currentSunday = new Date(now)
+  currentSunday.setDate(now.getDate() - now.getDay() + weekOffset * 7)
+  currentSunday.setHours(0, 0, 0, 0)
+  const diffDays = Math.floor((currentSunday.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24))
+  const weekNum = Math.floor(diffDays / 7) + 1
+  return weekNum
+}
+
+export const getCoursesForWeek = (courses: Course[], weekNum: number): Course[] => {
+  return courses.filter(c => c.weeks.includes(weekNum))
+}

@@ -9,12 +9,19 @@ Component({
           { id: 'modelManage', title: '模型管理', type: 'arrow' },
           { id: 'auth', title: '认证信息', type: 'arrow' }
         ]
+      },
+      {
+        title: '关于',
+        items: [
+          { id: 'about', title: '关于「蜗壳脑袋」', type: 'arrow' }
+        ]
       }
     ],
     authDialogVisible: false,
     authUsername: '',
     authPassword: '',
-    passwordVisible: false
+    passwordVisible: false,
+    showAbout: false
   },
   lifetimes: {
     attached() {
@@ -39,6 +46,8 @@ Component({
         wx.navigateTo({ url: '/pages/settings/model/model' })
       } else if (item.id === 'auth') {
         this.setData({ authDialogVisible: true })
+      } else if (item.id === 'about') {
+        this.setData({ showAbout: true })
       }
     },
     onAuthDialogClose() {
@@ -63,7 +72,15 @@ Component({
       this.setData({ passwordVisible: !this.data.passwordVisible })
     },
     onDialogMaskTap() {
-      this.onAuthDialogClose()
+      if (this.data.authDialogVisible) {
+        this.onAuthDialogClose()
+      }
+      if (this.data.showAbout) {
+        this.setData({ showAbout: false })
+      }
+    },
+    onAboutClose() {
+      this.setData({ showAbout: false })
     },
     preventBubble() {}
   }

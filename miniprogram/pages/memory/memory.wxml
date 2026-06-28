@@ -7,6 +7,10 @@
   style="height: {{scrollViewHeight}}px"
 >
   <view class="page-content" style="padding-bottom: {{contentPaddingBottom}}px">
+    <view class="sync-btn" bindtap="onSyncTap" hover-class="sync-btn-active">
+      <view class="sync-icon"></view>
+    </view>
+
     <section-card bind:headertap="goToSchedule">
       <view slot="header">
         <text class="card-title">日程</text>
