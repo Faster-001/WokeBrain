@@ -2,11 +2,13 @@
   <view class="timetable-grid">
 
     <view class="grid-row-header">
-      <text class="header-week">{{weekStart}} ~ {{weekEnd}}</text>
+      <text class="header-week">{{weekHeader}}</text>
       <view class="header-nav">
-        <view class="nav-arrow nav-prev" bindtap="onPrevWeek" hover-class="nav-arrow-hover"></view>
-        <view class="nav-label {{isCurrentWeek ? 'nav-label-active' : ''}}" bindtap="onThisWeek" hover-class="nav-active">本周</view>
-        <view class="nav-arrow nav-next" bindtap="onNextWeek" hover-class="nav-arrow-hover"></view>
+        <view wx:if="{{canPrev}}" class="nav-arrow nav-prev" bindtap="onPrevWeek" hover-class="nav-arrow-hover"></view>
+        <view wx:else class="nav-arrow nav-placeholder"></view>
+        <view class="nav-label {{isCurrentWeek && isSemesterActive ? 'nav-label-active' : ''}}" bindtap="onThisWeek" hover-class="nav-active">本周</view>
+        <view wx:if="{{canNext}}" class="nav-arrow nav-next" bindtap="onNextWeek" hover-class="nav-arrow-hover"></view>
+        <view wx:else class="nav-arrow nav-placeholder"></view>
       </view>
     </view>
 
@@ -56,6 +58,21 @@
         style="grid-row: {{row}}; grid-column: {{col}};"
       ></view>
     </block>
+
+    <view
+      class="course-block"
+      wx:for="{{weekCourses}}"
+      wx:key="id"
+      style="grid-row: {{item.periodStart + 2}} / {{item.periodEnd + 3}}; grid-column: {{item.weekday + 3}};"
+    >
+      <text class="course-name" style="-webkit-line-clamp: {{item.maxLines}};">{{item.name}}</text>
+      <view class="course-marquee-wrapper {{item.teacherMarquee ? 'marquee-active' : ''}}">
+        <text class="course-teacher {{item.teacherMarquee ? 'course-marquee-run' : ''}}" style="{{item.teacherMarquee ? '--marquee-distance: -' + item.teacherMarqueeDist + 'px' : ''}}">{{item.teacher}}</text>
+      </view>
+      <view class="course-marquee-wrapper {{item.locationMarquee ? 'marquee-active' : ''}}">
+        <text class="course-location {{item.locationMarquee ? 'course-marquee-run' : ''}}" style="{{item.locationMarquee ? '--marquee-distance: -' + item.locationMarqueeDist + 'px' : ''}}">{{item.location}}</text>
+      </view>
+    </view>
 
   </view>
 </view>

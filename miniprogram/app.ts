@@ -96,7 +96,7 @@ App<IAppOption>({
     const defaultCourses = [
       { name: '数学分析(B2)', teacher: '张明波', location: '3C202', periodStart: 3, periodEnd: 4, weekday: 1, weeks: [1, 2, 3, 4, 5, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18] },
       { name: '面向科学问题求解的编程实践', teacher: '孙广中', location: '西区电三楼机房5楼各教室', periodStart: 11, periodEnd: 13, weekday: 3, weeks: [5, 6, 7, 8, 9, 11] },
-      { name: '数学分析(B2)', teacher: '张明波', location: '3C202', periodStart: 3, periodEnd: 4, weekday: 3, weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18] }
+      { name: '数学分析(B2)', teacher: '张明波', location: '3C202', periodStart: 3, periodEnd: 4, weekday: 5, weeks: [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 17, 18] }
     ]
     this.globalData.courses = defaultCourses
     wx.setStorageSync('courses', defaultCourses)

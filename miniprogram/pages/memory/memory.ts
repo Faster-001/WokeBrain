@@ -1,15 +1,12 @@
-import { enrichSchedule, formatDate } from '../../utils/util'
+import { enrichSchedule, formatDate, enrichCourse, getSemesterWeek, getPeriodTimeRange, type CourseRaw } from '../../utils/util'
 
 Component({
   data: {
     scrollViewHeight: 0,
     contentPaddingBottom: 0,
     schedules: [] as any[],
-    courses: [
-      { id: 1, timeRange: '08:00-09:35', name: '高等数学', location: '教学楼A301' },
-      { id: 2, timeRange: '10:05-11:40', name: '大学英语', location: '教学楼B205' },
-      { id: 3, timeRange: '14:00-15:35', name: '数据结构', location: '实验楼C102' }
-    ]
+    courses: [] as any[],
+    semesterOutOfRange: false
   },
   lifetimes: {
     attached() {
@@ -27,6 +24,7 @@ Component({
         this.getTabBar().setData({ selected: 1 })
       }
       this.loadSchedules()
+      this.loadCourses()
     },
     loadSchedules() {
       const app = getApp<IAppOption>()
@@ -39,6 +37,44 @@ Component({
         }
       })
       this.setData({ schedules: enrichedSchedules })
+    },
+    loadCourses() {
+      const app = getApp<IAppOption>()
+      const allCourses = app.globalData.courses || []
+      if (allCourses.length === 0) {
+        this.setData({ courses: [], semesterOutOfRange: false })
+        return
+      }
+
+      const semesterConfig = app.globalData.semesterConfig || { startDate: '2026/03/02', totalWeeks: 20 }
+      const weekNum = getSemesterWeek(semesterConfig, 0)
+      if (weekNum < 1 || weekNum > 22) {
+        this.setData({ courses: [], semesterOutOfRange: true })
+        return
+      }
+
+      const now = new Date()
+      const todayWeekday = now.getDay()
+      const currentHour = now.getHours()
+      const showTomorrow = currentHour >= 20
+
+      const targetWeekdays = [todayWeekday]
+      if (showTomorrow) {
+        targetWeekdays.push((todayWeekday + 1) % 7)
+      }
+
+      const filtered = allCourses
+        .filter((c: CourseRaw) => targetWeekdays.includes(c.weekday) && c.weeks.includes(weekNum))
+        .map((c: CourseRaw, i: number) => {
+          const enriched = enrichCourse(c, i)
+          return {
+            ...enriched,
+            timeRange: getPeriodTimeRange(c.periodStart, c.periodEnd)
+          }
+        })
+        .sort((a, b) => (a.weekday - b.weekday) || (a.periodStart - b.periodStart))
+
+      this.setData({ courses: filtered, semesterOutOfRange: false })
     },
     goToSchedule() {
       wx.navigateTo({ url: '/pages/memory/schedule/schedule' })
@@ -58,6 +94,7 @@ Component({
           duration: 1500
         })
         this.loadSchedules()
+        this.loadCourses()
       }, 600)
     }
   }

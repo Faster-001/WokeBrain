@@ -52,7 +52,8 @@
           </view>
         </view>
         <view class="card-empty" wx:if="{{courses.length === 0}}">
-          <text class="empty-text">今日无课程</text>
+          <text class="empty-text" wx:if="{{semesterOutOfRange}}">学期已结束/尚未开始</text>
+          <text class="empty-text" wx:else>今日无课程</text>
         </view>
       </view>
     </section-card>

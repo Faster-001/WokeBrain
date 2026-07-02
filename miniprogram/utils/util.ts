@@ -114,15 +114,36 @@ export const enrichCourse = (course: CourseRaw, index: number): Course => {
 
 export const getSemesterWeek = (semesterConfig: SemesterConfig, weekOffset: number): number => {
   const startDate = new Date(semesterConfig.startDate.replace(/\//g, '-'))
+  const startSunday = new Date(startDate)
+  startSunday.setDate(startDate.getDate() - startDate.getDay())
+  startSunday.setHours(0, 0, 0, 0)
   const now = new Date()
   const currentSunday = new Date(now)
   currentSunday.setDate(now.getDate() - now.getDay() + weekOffset * 7)
   currentSunday.setHours(0, 0, 0, 0)
-  const diffDays = Math.floor((currentSunday.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24))
+  const diffDays = Math.floor((currentSunday.getTime() - startSunday.getTime()) / (1000 * 60 * 60 * 24))
   const weekNum = Math.floor(diffDays / 7) + 1
   return weekNum
 }
 
 export const getCoursesForWeek = (courses: Course[], weekNum: number): Course[] => {
   return courses.filter(c => c.weeks.includes(weekNum))
+}
+
+const PERIOD_START_TIMES = [
+  '07:50', '08:40', '09:45', '10:35', '11:25',
+  '14:00', '14:50', '15:55', '16:45', '17:35',
+  '19:30', '20:20', '21:10'
+]
+
+const PERIOD_END_TIMES = [
+  '08:35', '09:25', '10:30', '11:20', '12:10',
+  '14:45', '15:35', '16:40', '17:30', '18:20',
+  '20:15', '21:05', '21:55'
+]
+
+export const getPeriodTimeRange = (periodStart: number, periodEnd: number): string => {
+  const start = PERIOD_START_TIMES[periodStart - 1] || ''
+  const end = PERIOD_END_TIMES[periodEnd - 1] || ''
+  return `${start}-${end}`
 }

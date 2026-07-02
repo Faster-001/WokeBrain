@@ -98,7 +98,10 @@
     <view class="about-body">
       <image class="about-icon" src="/assets/WokeBrain.png" mode="aspectFit" />
       <text class="about-name">蜗壳脑袋 · WokeBrain</text>
-      <text class="about-desc">把日子装进蜗壳，让记忆慢慢爬行。\n蜗壳脑袋，陪你度过校园时光的每一个瞬间。</text>
+      <view class="about-desc">
+        <text>把日子装进蜗壳，让记忆慢慢爬行。</text>
+        <text>蜗壳脑袋，陪你度过校园时光的每一个瞬间。</text>
+      </view>
     </view>
     <view class="about-footer">
       <view class="dialog-btn dialog-btn-confirm" bindtap="onAboutClose">
