@@ -55,7 +55,6 @@ Component({
     },
     onAuthConfirm() {
       const { authUsername, authPassword } = this.data
-      console.log('Auth confirmed:', { username: authUsername, password: authPassword })
       this.setData({ authDialogVisible: false, authUsername: '', authPassword: '', passwordVisible: false })
     },
     onAuthUsernameInput(e: WechatMiniprogram.Input) {

@@ -51,7 +51,6 @@ Page({
 
   onSaveAndFetch() {
     const { baseUrl, apiKey } = this.data
-    console.log('Save & Fetch:', { baseUrl, apiKey })
     this.fetchModels()
   },
 
