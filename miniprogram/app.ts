@@ -111,6 +111,23 @@ App<IAppOption>({
       { name: '数据库系统概论', teacher: '黄振亚', location: '3C104', periodStart: 8, periodEnd: 9, weekday: 5, weeks: [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15] },
       { name: '数据分析及实践', teacher: '程明月、刘祺', location: '西区科技楼 717', periodStart: 11, periodEnd: 13, weekday: 5, weeks: [4, 5, 6, 8, 9, 10, 11, 12, 13, 15] }
     ]
+
+    const fridayRandomProcess = defaultCourses.find(course => course.weekday === 5 && course.periodStart === 5 && course.periodEnd === 5)
+    if (fridayRandomProcess) {
+      fridayRandomProcess.weeks = [2, 4, 6, 8, 10, 12, 14]
+    }
+
+    const fridayDataAnalysis = defaultCourses.find(course => course.weekday === 5 && course.periodStart === 11 && course.periodEnd === 13)
+    if (fridayDataAnalysis) {
+      fridayDataAnalysis.weeks = [4, 5, 6, 8, 10, 11, 12, 13, 14, 15]
+    }
+
+    defaultCourses.push(
+      { name: '自卫防身术 II', teacher: '唐莉', location: '中区搏击馆', periodStart: 3, periodEnd: 4, weekday: 6, weeks: [10] },
+      { name: '计算方法', teacher: '陈先进', location: '1201', periodStart: 6, periodEnd: 7, weekday: 6, weeks: [10] },
+      { name: '深度学习基础', teacher: '王文杰', location: '3C203', periodStart: 8, periodEnd: 9, weekday: 6, weeks: [10] },
+      { name: '深度学习基础', teacher: '王文杰', location: '西区电一楼机房 1 厅', periodStart: 11, periodEnd: 13, weekday: 6, weeks: [10] }
+    )
     this.globalData.courses = defaultCourses
     wx.setStorageSync('courses', defaultCourses)
 

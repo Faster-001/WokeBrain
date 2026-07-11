@@ -1,5 +1,5 @@
 <view class="page-container">
-  <view class="timetable-grid">
+  <view class="timetable-grid" style="grid-template-columns: {{gridTemplateColumns}};">
 
     <view class="grid-row-header">
       <text class="header-week">{{weekHeader}}</text>
@@ -15,7 +15,7 @@
     <view class="grid-cell grid-subheader grid-subheader-brand" style="grid-column: 1 / 3;">节数</view>
     <view
       class="grid-cell grid-subheader grid-subheader-day"
-      wx:for="{{dayLabels}}"
+      wx:for="{{visibleDays}}"
       wx:key="*this"
     >{{item}}</view>
 
@@ -52,7 +52,7 @@
     <block wx:for="{{[3,4,5,6,7,8,9,10,11,12,13,14,15]}}" wx:for-item="row" wx:key="*this">
       <view
         class="grid-cell grid-body"
-        wx:for="{{[3,4,5,6,7,8,9]}}"
+        wx:for="{{visibleGridColumns}}"
         wx:for-item="col"
         wx:key="*this"
         style="grid-row: {{row}}; grid-column: {{col}};"
@@ -60,17 +60,29 @@
     </block>
 
     <view
-      class="course-block"
+      class="course-block {{item.isConnected ? 'course-block--connected' : ''}}"
       wx:for="{{weekCourses}}"
       wx:key="id"
-      style="grid-row: {{item.periodStart + 2}} / {{item.periodEnd + 3}}; grid-column: {{item.weekday + 3}};"
+      style="grid-row: {{item.periodStart + 2}} / {{item.periodEnd + 3}}; grid-column: {{item.gridColumn}};"
     >
-      <text class="course-name" style="-webkit-line-clamp: {{item.maxLines}};">{{item.name}}</text>
-      <view class="course-marquee-wrapper {{item.teacherMarquee ? 'marquee-active' : ''}}">
-        <text class="course-teacher {{item.teacherMarquee ? 'course-marquee-run' : ''}}" style="{{item.teacherMarquee ? '--marquee-distance: -' + item.teacherMarqueeDist + 'px' : ''}}">{{item.teacher}}</text>
-      </view>
-      <view class="course-marquee-wrapper {{item.locationMarquee ? 'marquee-active' : ''}}">
-        <text class="course-location {{item.locationMarquee ? 'course-marquee-run' : ''}}" style="{{item.locationMarquee ? '--marquee-distance: -' + item.locationMarqueeDist + 'px' : ''}}">{{item.location}}</text>
+      <view
+        class="course-segment course-segment--{{segment.displayMode}}"
+        wx:for="{{item.segments}}"
+        wx:for-item="segment"
+        wx:key="id"
+        style="flex: {{segment.rowSpan}};"
+      >
+        <text wx:if="{{segment.showStartTime}}" class="course-time course-time-start">{{segment.startTime}}</text>
+        <view class="course-title-band">
+          <text class="course-name" style="-webkit-line-clamp: {{segment.courseNameLines}};">{{segment.name}}</text>
+        </view>
+        <view class="course-details">
+          <text wx:if="{{segment.showTeacher}}" class="course-meta course-teacher" style="-webkit-line-clamp: {{segment.teacherLines}};">{{segment.teacher}}</text>
+          <text wx:if="{{segment.showWeeks}}" class="course-meta course-weeks" style="-webkit-line-clamp: {{segment.weekLines}};">{{segment.weekText}}</text>
+          <text wx:if="{{segment.showPeriods}}" class="course-meta course-periods">{{segment.periodText}}</text>
+          <text wx:if="{{segment.showLocation}}" class="course-meta course-location" style="-webkit-line-clamp: {{segment.locationLines}};">{{segment.location}}</text>
+        </view>
+        <text wx:if="{{segment.showEndTime}}" class="course-time course-time-end">{{segment.endTime}}</text>
       </view>
     </view>
 
