@@ -190,6 +190,7 @@
   flex-shrink: 0;
   margin-left: var(--spacing-2xs);
   margin-right: var(--spacing-2xs);
+  white-space: nowrap;
 }
 
 .course-time-end {

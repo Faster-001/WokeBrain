@@ -77,9 +77,9 @@
           <text class="course-name" style="-webkit-line-clamp: {{segment.courseNameLines}};">{{segment.name}}</text>
         </view>
         <view class="course-details">
-          <text wx:if="{{segment.showTeacher}}" class="course-meta course-teacher" style="-webkit-line-clamp: {{segment.teacherLines}};">{{segment.teacher}}</text>
+          <text wx:if="{{segment.showTeacher}}" class="course-meta course-teacher" style="-webkit-line-clamp: {{segment.teacherLines}};">{{segment.teacherText}}</text>
           <text wx:if="{{segment.showWeeks}}" class="course-meta course-weeks" style="-webkit-line-clamp: {{segment.weekLines}};">{{segment.weekText}}</text>
-          <text wx:if="{{segment.showPeriods}}" class="course-meta course-periods">{{segment.periodText}}</text>
+          <text wx:if="{{segment.showPeriods}}" class="course-meta course-periods" style="-webkit-line-clamp: {{segment.periodLines}};">{{segment.periodText}}</text>
           <text wx:if="{{segment.showLocation}}" class="course-meta course-location" style="-webkit-line-clamp: {{segment.locationLines}};">{{segment.location}}</text>
         </view>
         <text wx:if="{{segment.showEndTime}}" class="course-time course-time-end">{{segment.endTime}}</text>

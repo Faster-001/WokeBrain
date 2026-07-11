@@ -7,6 +7,18 @@ const estimateLineCount = (text: string, charactersPerLine: number): number => {
   return Math.max(1, Math.ceil(Array.from(text).length / charactersPerLine))
 }
 
+const truncateText = (text: string, charactersPerLine: number, lineLimit: number): string => {
+  const characters = Array.from(text)
+  const capacity = charactersPerLine * lineLimit
+  if (characters.length <= capacity) {
+    return text
+  }
+  if (capacity <= 3) {
+    return '...'
+  }
+  return `${characters.slice(0, Math.max(1, capacity - 3)).join('')}...`
+}
+
 const formatWeeks = (weeks: number[]): string => {
   const sortedWeeks = [...weeks].sort((a, b) => a - b)
   if (sortedWeeks.length > 1 && sortedWeeks.every((week, index) => index === 0 || week - sortedWeeks[index - 1] === 2)) {
@@ -73,19 +85,27 @@ const groupAdjacentCourses = (courses: Course[]): CourseBlock[] => {
   }, [])
 }
 
-const getSegmentLayout = (course: Course, showStartTime: boolean, showEndTime: boolean) => {
+const getSegmentLayout = (
+  course: Course,
+  showStartTime: boolean,
+  showEndTime: boolean,
+  visibleDayCount: number
+) => {
   const rowSpan = course.periodEnd - course.periodStart + 1
   const [startTime, endTime] = getPeriodTimeRange(course.periodStart, course.periodEnd).split('-')
   const weekText = formatWeeks(course.weeks)
+  const periodText = `${course.periodStart}-${course.periodEnd}节`
+  const charactersPerLine = visibleDayCount <= 5 ? 5 : visibleDayCount === 6 ? 4 : 3
   const contentLineBudget = rowSpan === 1 ? 5 : rowSpan === 2 ? 8 : rowSpan * 5 - 1
   const titleLineLimit = rowSpan === 1 ? 3 : rowSpan === 2 ? 4 : 6
   const teacherLineLimit = rowSpan === 1 ? 2 : rowSpan === 2 ? 2 : 3
-  const locationLineLimit = rowSpan === 1 ? 2 : rowSpan === 2 ? 2 : 3
+  const locationLineLimit = rowSpan === 1 ? 3 : rowSpan === 2 ? 4 : 5
 
-  let courseNameLines = Math.min(titleLineLimit, estimateLineCount(course.name, 5))
-  let teacherLines = Math.min(teacherLineLimit, estimateLineCount(course.teacher, 5))
-  let weekLines = Math.min(2, estimateLineCount(weekText, 7))
-  const locationLines = Math.min(locationLineLimit, estimateLineCount(course.location, 7))
+  let courseNameLines = Math.min(titleLineLimit, estimateLineCount(course.name, charactersPerLine))
+  let teacherLines = Math.min(teacherLineLimit, estimateLineCount(course.teacher, charactersPerLine))
+  let weekLines = Math.min(2, estimateLineCount(weekText, charactersPerLine))
+  let periodLines = Math.min(2, estimateLineCount(periodText, charactersPerLine))
+  const locationLines = Math.min(locationLineLimit, estimateLineCount(course.location, charactersPerLine))
   let showTeacher = Boolean(course.teacher)
   let showWeeks = true
   let showPeriods = true
@@ -95,13 +115,16 @@ const getSegmentLayout = (course: Course, showStartTime: boolean, showEndTime: b
     + locationLines
     + (showTeacher ? teacherLines : 0)
     + (showWeeks ? weekLines : 0)
-    + (showPeriods ? 1 : 0)
+    + (showPeriods ? periodLines : 0)
     + Number(showStartTime)
     + Number(showEndTime)
   )
 
   if (usedLines() > contentLineBudget) {
     weekLines = 1
+  }
+  if (usedLines() > contentLineBudget) {
+    periodLines = 1
   }
   if (usedLines() > contentLineBudget) {
     showPeriods = false
@@ -119,6 +142,10 @@ const getSegmentLayout = (course: Course, showStartTime: boolean, showEndTime: b
     showTeacher = false
   }
 
+  const teacherText = showTeacher
+    ? truncateText(course.teacher, charactersPerLine, teacherLines)
+    : ''
+
   return {
     ...course,
     rowSpan,
@@ -130,9 +157,11 @@ const getSegmentLayout = (course: Course, showStartTime: boolean, showEndTime: b
     startTime,
     endTime,
     weekText,
-    periodText: `${course.periodStart}-${course.periodEnd}节`,
+    periodText,
+    periodLines,
     showStartTime,
     showEndTime,
+    teacherText,
     showTeacher,
     showWeeks,
     showPeriods,
@@ -196,6 +225,11 @@ Page({
     const rawCourses = app.globalData.courses || []
     const enriched = rawCourses.map((c: any, i: number) => enrichCourse(c, i))
     const activeCourses = getCoursesForWeek(enriched, weekNum)
+    const dayLabels = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
+    const scheduledWeekdays = new Set(activeCourses.map(course => course.weekday))
+    const visibleWeekdays = dayLabels
+      .map((label, weekday) => ({ label, weekday }))
+      .filter(day => (day.weekday >= 1 && day.weekday <= 5) || scheduledWeekdays.has(day.weekday))
     const coursesForWeek = groupAdjacentCourses(activeCourses).map(block => {
       const rowSpan = block.periodEnd - block.periodStart + 1
       return {
@@ -205,16 +239,12 @@ Page({
         segments: block.segments.map((course, index) => getSegmentLayout(
           course,
           index === 0,
-          index === block.segments.length - 1
+          index === block.segments.length - 1,
+          visibleWeekdays.length
         ))
       }
     })
 
-    const dayLabels = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
-    const scheduledWeekdays = new Set(coursesForWeek.map((course: any) => course.weekday))
-    const visibleWeekdays = dayLabels
-      .map((label, weekday) => ({ label, weekday }))
-      .filter(day => (day.weekday >= 1 && day.weekday <= 5) || scheduledWeekdays.has(day.weekday))
     const weekdayToGridColumn = new Map(visibleWeekdays.map((day, index) => [day.weekday, index + 3]))
     const weekCourses = coursesForWeek.map((course: any) => ({
       ...course,
