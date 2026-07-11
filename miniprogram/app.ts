@@ -94,9 +94,22 @@ App<IAppOption>({
     wx.setStorageSync('schedules', defaultSchedules)
 
     const defaultCourses = [
-      { name: '数学分析(B2)', teacher: '张明波', location: '3C202', periodStart: 3, periodEnd: 4, weekday: 1, weeks: [1, 2, 3, 4, 5, 7, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18] },
-      { name: '面向科学问题求解的编程实践', teacher: '孙广中', location: '西区电三楼机房5楼各教室', periodStart: 11, periodEnd: 13, weekday: 3, weeks: [5, 6, 7, 8, 9, 11] },
-      { name: '数学分析(B2)', teacher: '张明波', location: '3C202', periodStart: 3, periodEnd: 4, weekday: 5, weeks: [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 17, 18] }
+      { name: '自卫防身术 II', teacher: '唐莉', location: '中区搏击馆', periodStart: 3, periodEnd: 4, weekday: 1, weeks: [1, 2, 3, 4, 5, 7, 8, 9, 11, 12, 13, 14, 15, 16] },
+      { name: '计算方法', teacher: '陈先进', location: '1201', periodStart: 6, periodEnd: 7, weekday: 1, weeks: [1, 2, 3, 4, 5, 7, 8, 9, 11, 12, 13, 14, 15] },
+      { name: '深度学习基础', teacher: '王文杰、冯福利', location: '3C203', periodStart: 8, periodEnd: 10, weekday: 1, weeks: [1, 2, 3, 4, 5, 7, 8, 9, 11, 12, 13, 14] },
+      { name: '深度学习基础', teacher: '王文杰、冯福利', location: '西区电一楼机房 1 厅', periodStart: 11, periodEnd: 13, weekday: 1, weeks: [3, 4, 5, 7, 8, 9, 11, 12, 13, 14] },
+      { name: '数据库系统概论', teacher: '黄振亚', location: '3C104', periodStart: 3, periodEnd: 4, weekday: 2, weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15] },
+      { name: '金融机构与金融市场', teacher: '何欣', location: '5505', periodStart: 6, periodEnd: 7, weekday: 2, weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15] },
+      { name: '毛泽东思想和中国特色社会主义理论体系概论', teacher: '虎旭昕', location: '3C302', periodStart: 8, periodEnd: 10, weekday: 2, weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15, 16] },
+      { name: '计算方法', teacher: '陈先进', location: '1201', periodStart: 3, periodEnd: 4, weekday: 3, weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] },
+      { name: '量子物理', teacher: '崔金明', location: '3C303', periodStart: 6, periodEnd: 7, weekday: 3, weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] },
+      { name: '数据分析及实践', teacher: '程明月、刘祺', location: '3C202', periodStart: 8, periodEnd: 10, weekday: 4, weeks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] },
+      { name: '量子物理', teacher: '崔金明', location: '3C303', periodStart: 1, periodEnd: 2, weekday: 5, weeks: [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15] },
+      { name: '随机过程 B', teacher: '庄玮玮', location: '3C204', periodStart: 3, periodEnd: 4, weekday: 5, weeks: [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15] },
+      { name: '随机过程 B', teacher: '庄玮玮', location: '3C204', periodStart: 5, periodEnd: 5, weekday: 5, weeks: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] },
+      { name: '金融机构与金融市场', teacher: '何欣', location: '5505', periodStart: 6, periodEnd: 7, weekday: 5, weeks: [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15] },
+      { name: '数据库系统概论', teacher: '黄振亚', location: '3C104', periodStart: 8, periodEnd: 9, weekday: 5, weeks: [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15] },
+      { name: '数据分析及实践', teacher: '程明月、刘祺', location: '西区科技楼 717', periodStart: 11, periodEnd: 13, weekday: 5, weeks: [4, 5, 6, 8, 9, 10, 11, 12, 13, 15] }
     ]
     this.globalData.courses = defaultCourses
     wx.setStorageSync('courses', defaultCourses)
