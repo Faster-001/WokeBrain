@@ -7,6 +7,7 @@ interface IAppOption {
     schedules: any[],
     courses: any[],
     semesterConfig: { startDate: string, totalWeeks: number },
+    aiConfig?: import('./miniprogram/types/ai').AiConfig | null,
   }
   userInfoReadyCallback?: WechatMiniprogram.GetUserInfoSuccessCallback,
   initSchedules(): void,

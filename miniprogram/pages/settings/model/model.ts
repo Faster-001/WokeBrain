@@ -1,8 +1,12 @@
+import { configStore } from '../../../services/config-store'
+import { aiClient } from '../../../services/ai-client'
+
 Page({
   data: {
     baseUrl: '',
     apiKey: '',
     passwordVisible: false,
+    loading: false,
     models: [
       { id: 1, name: 'gpt-5.5', needMarquee: false },
       { id: 2, name: 'deepseek-v4-flash', needMarquee: false },
@@ -25,11 +29,62 @@ Page({
       { id: 19, name: 'glm-5-airxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', needMarquee: false },
       { id: 20, name: '_custom_', needMarquee: false }
     ],
-    selectedModelId: null,
+    selectedModelId: null as number | null,
     customModelId: ''
   },
 
   onLoad() {
+    this.restoreConfig()
+  },
+
+  onShow() {
+    // 从其他页面返回时也刷新配置回填
+    this.restoreConfig()
+    // 每次进入页面默认隐藏 apiKey
+    this.setData({ passwordVisible: false })
+  },
+
+  onHide() {
+    // 离开页面时隐藏 apiKey 并清除内存中的明文
+    this.setData({ passwordVisible: false })
+    configStore.clearApiKey()
+  },
+
+  onUnload() {
+    // 页面卸载时同样清除
+    this.setData({ passwordVisible: false })
+    configStore.clearApiKey()
+  },
+
+  /** 安全提示弹窗 */
+  onSecurityTip() {
+    wx.showModal({
+      title: 'API Key 安全说明',
+      content: '你的 API Key 采用设备绑定加密存储，仅保存在本地，不会上传到任何服务器。\n\n• 离开此页面后自动隐藏\n• 存储时加密，无法被直接读取\n• 请勿在公共设备上保存 API Key\n• 定期更换 API Key 更安全',
+      showCancel: false,
+      confirmText: '我知道了'
+    })
+  },
+
+  /** 从 configStore 回填 baseUrl / apiKey / selectedModel 到 UI */
+  restoreConfig() {
+    const cfg = configStore.get()
+    const patch: Record<string, any> = {
+      baseUrl: cfg.baseUrl,
+      apiKey: cfg.apiKey
+    }
+    // 回填选中的模型
+    if (cfg.selectedModel) {
+      const foundIndex = this.data.models.findIndex(m => m.name === cfg.selectedModel)
+      if (foundIndex >= 0) {
+        patch.selectedModelId = this.data.models[foundIndex].id
+      } else {
+        // 未在预设列表中 → 选中"自定义"并回填
+        patch.selectedModelId = this.data.models[this.data.models.length - 1].id
+        patch.customModelId = cfg.selectedModel
+      }
+    }
+    this.setData(patch)
     this.checkMarquee()
   },
 
@@ -51,27 +106,89 @@ Page({
 
   onSaveAndFetch() {
     const { baseUrl, apiKey } = this.data
+    if (!baseUrl || !apiKey) {
+      wx.showToast({ title: '请填写 Base URL 和 API Key', icon: 'none' })
+      return
+    }
+    configStore.patch({ baseUrl, apiKey })
     this.fetchModels()
   },
 
-  fetchModels() {
-    console.log('TODO: fetch models from API')
+  async fetchModels() {
+    if (this.data.loading) return
+    this.setData({ loading: true })
+    wx.showLoading({ title: '获取模型中...', mask: true })
+    try {
+      const cfg = configStore.get()
+      const remoteModels = await aiClient.fetchModels(cfg)
+      if (remoteModels.length === 0) {
+        wx.showToast({ title: '未获取到模型', icon: 'none' })
+        return
+      }
+      // 用 API 返回的模型替换硬编码列表，末尾追加"自定义模型"项
+      const newModels = remoteModels.map((m, i) => ({
+        id: i + 1,
+        name: m.name,
+        needMarquee: false
+      }))
+      newModels.push({ id: newModels.length + 1, name: '_custom_', needMarquee: false })
+
+      // 保留之前选中的模型（如果在新列表中存在）
+      const prevSelected = configStore.get().selectedModel
+      let newSelectedId: number | null = null
+      let newCustomModelId = this.data.customModelId
+      if (prevSelected) {
+        const foundIndex = newModels.findIndex(m => m.name === prevSelected)
+        if (foundIndex >= 0) {
+          newSelectedId = newModels[foundIndex].id
+        } else {
+          newSelectedId = newModels[newModels.length - 1].id
+          newCustomModelId = prevSelected
+        }
+      }
+
+      this.setData({
+        models: newModels,
+        selectedModelId: newSelectedId,
+        customModelId: newCustomModelId
+      })
+      this.checkMarquee()
+      wx.showToast({ title: '获取成功', icon: 'success', duration: 1500 })
+    } catch (err: any) {
+      const errMsg = err?.errMsg || err?.message || '获取模型失败'
+      wx.showToast({ title: errMsg.slice(0, 30), icon: 'none', duration: 3000 })
+    } finally {
+      this.setData({ loading: false })
+      wx.hideLoading()
+    }
   },
 
   onModelSelect(e: WechatMiniprogram.TouchEvent) {
     const modelId = e.currentTarget.dataset.id
     const index = e.currentTarget.dataset.index
     this.setData({ selectedModelId: modelId })
+
+    // 确定选中的模型名称并持久化
+    let selectedModelName = ''
     if (index === this.data.models.length - 1) {
-      console.log('Custom model selected, id:', this.data.customModelId)
+      // 自定义模型
+      selectedModelName = this.data.customModelId
     } else {
-      console.log('Model selected:', this.data.models.find(m => m.id === modelId))
+      const model = this.data.models.find(m => m.id === modelId)
+      selectedModelName = model ? model.name : ''
+    }
+    if (selectedModelName) {
+      configStore.patch({ selectedModel: selectedModelName })
     }
   },
 
   onCustomModelInput(e: WechatMiniprogram.Input) {
     const sanitized = e.detail.value.replace(/[^\x21-\x7E]/g, '').slice(0, 100)
     this.setData({ customModelId: sanitized })
+    // 如果当前选中的是自定义模型，实时持久化
+    if (this.data.selectedModelId === this.data.models[this.data.models.length - 1].id && sanitized) {
+      configStore.patch({ selectedModel: sanitized })
+    }
     return sanitized
   },
 

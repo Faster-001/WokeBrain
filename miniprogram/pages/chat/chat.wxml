@@ -1,3 +1,57 @@
 <view class="page-container">
-  <text class="page-name">对话</text>
+  <!-- 未配置引导条 -->
+  <view wx:if="{{!configReady}}" class="config-banner" bindtap="goToSettings">
+    <text class="config-banner-text">尚未配置 API，点击前往设置</text>
+    <view class="config-banner-arrow"></view>
+  </view>
+
+  <!-- 消息列表 -->
+  <scroll-view
+    class="message-list"
+    scroll-y
+    enhanced
+    bounces
+    show-scrollbar="{{false}}"
+    style="height: {{scrollViewHeight - 60}}px"
+    scroll-into-view="{{scrollIntoViewId}}"
+  >
+    <view class="message-list-inner">
+      <view
+        wx:for="{{messages}}"
+        wx:key="id"
+        id="msg-{{item.id}}"
+        class="message-row {{item.role === 'user' ? 'message-row-user' : 'message-row-assistant'}}"
+      >
+        <view class="bubble {{item.role === 'user' ? 'bubble-user' : 'bubble-assistant'}} {{item.status === 'error' ? 'bubble-error' : ''}} {{item.status === 'pending' ? 'bubble-pending' : ''}}">
+          <text wx:if="{{item.status === 'pending'}}" class="pending-dots">
+            <text class="dot">●</text><text class="dot">●</text><text class="dot">●</text>
+          </text>
+          <text wx:elif="{{item.status === 'error'}}" class="bubble-error-text">{{item.error || '请求失败'}}</text>
+          <text wx:else class="bubble-text">{{item.content}}</text>
+          <view wx:if="{{item.status === 'error'}}" class="retry-btn" data-id="{{item.id}}" bindtap="onRetry">
+            <text class="retry-btn-text">重试</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 底部输入栏 -->
+  <view class="input-bar" style="padding-bottom: {{contentPaddingBottom}}px">
+    <view class="input-bar-inner">
+      <input
+        class="chat-input"
+        placeholder="输入消息..."
+        placeholder-class="chat-input-placeholder"
+        value="{{inputValue}}"
+        bindinput="onInput"
+        bindconfirm="onSend"
+        confirm-type="send"
+        disabled="{{sending}}"
+      />
+      <view class="send-btn {{(inputValue && !sending) ? 'send-btn-active' : ''}}" bindtap="onSend">
+        <text class="send-btn-text">{{sending ? '...' : '发送'}}</text>
+      </view>
+    </view>
+  </view>
 </view>

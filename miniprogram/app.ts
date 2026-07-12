@@ -6,7 +6,8 @@ App<IAppOption>({
     semesterConfig: {
       startDate: '2026/03/02',
       totalWeeks: 20
-    }
+    },
+    aiConfig: null
   },
   onLaunch() {
     const logs = wx.getStorageSync('logs') || []
@@ -23,6 +24,7 @@ App<IAppOption>({
 
     this.initSchedules()
     this.initCourses()
+    this.initAiConfig()
 
     if (this.globalData.courses.length === 0) {
       wx.showToast({
@@ -65,6 +67,13 @@ App<IAppOption>({
   updateCourses(courses: any[]) {
     this.globalData.courses = courses
     wx.setStorageSync('courses', courses)
+  },
+
+  initAiConfig() {
+    const cached = wx.getStorageSync('aiConfig')
+    if (cached && typeof cached === 'object') {
+      this.globalData.aiConfig = cached
+    }
   },
 
   syncAllData() {

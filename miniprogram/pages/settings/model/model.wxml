@@ -31,9 +31,14 @@
             </view>
           </view>
         </view>
+        <view class="security-tip-row" bindtap="onSecurityTip">
+          <text class="security-tip-icon">🔒</text>
+          <text class="security-tip-text">API Key 加密存储于本地，离开页面自动隐藏</text>
+          <text class="security-tip-arrow">›</text>
+        </view>
       </view>
       
-      <button class="save-btn" bindtap="onSaveAndFetch">保存 & 获取模型</button>
+      <button class="save-btn" bindtap="onSaveAndFetch" loading="{{loading}}" disabled="{{loading}}">{{loading ? '获取中...' : '保存 & 获取模型'}}</button>
     </view>
   </view>
   
@@ -45,6 +50,9 @@
       bounces
     >
       <view class="model-list">
+        <view wx:if="{{loading}}" class="model-loading-row">
+          <text class="model-loading-text">正在获取模型列表...</text>
+        </view>
         <view
           class="model-item {{index < models.length - 1 ? 'model-border' : ''}}"
           wx:for="{{models}}"
